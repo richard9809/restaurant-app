@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\RoleResource\Pages;
+namespace App\Filament\Resources\UnitResource\Pages;
 
-use App\Filament\Resources\RoleResource;
+use App\Filament\Resources\UnitResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateRole extends CreateRecord
+class CreateUnit extends CreateRecord
 {
-    protected static string $resource = RoleResource::class;
+    protected static string $resource = UnitResource::class;
 
     protected function getRedirectUrl(): string
     {
@@ -17,6 +17,6 @@ class CreateRole extends CreateRecord
 
     protected function getCreatedNotificationTitle(): ?string
     {
-        return 'Role Created';
+        return 'Unit Created';
     }
 }

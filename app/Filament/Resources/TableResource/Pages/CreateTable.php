@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\RoleResource\Pages;
+namespace App\Filament\Resources\TableResource\Pages;
 
-use App\Filament\Resources\RoleResource;
+use App\Filament\Resources\TableResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateRole extends CreateRecord
+class CreateTable extends CreateRecord
 {
-    protected static string $resource = RoleResource::class;
+    protected static string $resource = TableResource::class;
 
     protected function getRedirectUrl(): string
     {
@@ -17,6 +17,6 @@ class CreateRole extends CreateRecord
 
     protected function getCreatedNotificationTitle(): ?string
     {
-        return 'Role Created';
+        return 'Table Created';
     }
 }

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\RoleResource\Pages;
+namespace App\Filament\Resources\FoodResource\Pages;
 
-use App\Filament\Resources\RoleResource;
+use App\Filament\Resources\FoodResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateRole extends CreateRecord
+class CreateFood extends CreateRecord
 {
-    protected static string $resource = RoleResource::class;
+    protected static string $resource = FoodResource::class;
 
     protected function getRedirectUrl(): string
     {
@@ -17,6 +17,6 @@ class CreateRole extends CreateRecord
 
     protected function getCreatedNotificationTitle(): ?string
     {
-        return 'Role Created';
+        return 'Food Created';
     }
 }

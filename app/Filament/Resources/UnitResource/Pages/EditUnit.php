@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\Pages;
+namespace App\Filament\Resources\UnitResource\Pages;
 
-use App\Filament\Resources\UserResource;
+use App\Filament\Resources\UnitResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditUser extends EditRecord
+class EditUnit extends EditRecord
 {
-    protected static string $resource = UserResource::class;
+    protected static string $resource = UnitResource::class;
 
     protected function getActions(): array
     {
@@ -19,6 +19,6 @@ class EditUser extends EditRecord
 
     protected function getSavedNotificationTitle(): ?string
     {
-        return 'User Updated';
+        return 'Unit Updated';
     }
 }
