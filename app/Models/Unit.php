@@ -13,8 +13,8 @@ class Unit extends Model
         'name',
     ];
 
-    public function foods()
+    public function inventories()
     {
-        return $this->hasMany(Food::class);
+        return $this->hasMany(Inventory::class);
     }
 }

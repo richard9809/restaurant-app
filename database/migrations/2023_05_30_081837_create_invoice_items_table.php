@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('invoice_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('invoice_id')->constrained('invoices')->cascadeOnDelete();
-            $table->foreignId('food_id')->constrained('foods')->cascadeOnDelete();
-            $table->string('received_quantity');
+            $table->foreignId('inventory_id')->constrained('inventories')->cascadeOnDelete();
             $table->unsignedInteger('quantity');
             $table->timestamps();
         });

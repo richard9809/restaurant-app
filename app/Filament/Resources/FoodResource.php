@@ -9,10 +9,12 @@ use App\Models\FoodCategory;
 use App\Models\Unit;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\FileUpload;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -32,7 +34,7 @@ class FoodResource extends Resource
             ->schema([
                 Card::make()
                     ->schema([
-                        Forms\Components\Select::make('food_category_id')
+                    Forms\Components\Select::make('food_category_id')
                         ->label('Food Category')
                         ->options(
                             FoodCategory::query()
@@ -57,6 +59,11 @@ class FoodResource extends Resource
                         ->numeric()
                         ->prefix('KES')
                         ->required(),
+                    FileUpload::make('image')
+                        ->image()
+                        ->directory('foods')
+                        ->imageCropAspectRatio('1:1')
+                        ->avatar(),
                     ])
                     ->columns(2),
             ]);
@@ -79,6 +86,9 @@ class FoodResource extends Resource
                 Tables\Columns\TextColumn::make('foodCategory.name')
                     ->label('Food Category')
                     ->searchable(),
+                ImageColumn::make('image')
+                    ->label('Image')
+                    ->rounded(),
             ])
             ->filters([
                 //

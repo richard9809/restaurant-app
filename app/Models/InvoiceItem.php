@@ -16,8 +16,8 @@ class InvoiceItem extends Model
         return $this->belongsTo(Invoice::class);
     }
 
-    public function food()
+    public function inventories()
     {
-        return $this->belongsTo(Food::class);
+        return $this->belongsTo(Inventory::class);
     }
 }
