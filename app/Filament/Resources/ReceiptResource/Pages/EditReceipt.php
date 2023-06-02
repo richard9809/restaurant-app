@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\InvoiceResource\Pages;
+namespace App\Filament\Resources\ReceiptResource\Pages;
 
-use App\Filament\Resources\InvoiceResource;
+use App\Filament\Resources\ReceiptResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditInvoice extends EditRecord
+class EditReceipt extends EditRecord
 {
-    protected static string $resource = InvoiceResource::class;
+    protected static string $resource = ReceiptResource::class;
 
     protected function getActions(): array
     {
@@ -16,7 +16,7 @@ class EditInvoice extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
-
+    
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
