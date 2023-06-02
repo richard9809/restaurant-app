@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\InvoiceResource\Pages;
 use App\Filament\Resources\InvoiceResource\RelationManagers;
 use App\Models\Food;
+use App\Models\Inventory;
 use App\Models\Invoice;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
@@ -50,19 +51,16 @@ class InvoiceResource extends Resource
                                 Repeater::make('items')
                                     ->relationship()
                                     ->schema([
-                                        Select::make('food_id')
-                                            ->label('Food')
+                                            Select::make('inventory_id')
+                                            ->label('Inventory Name')
                                             ->options(
-                                                Food::query()
+                                                Inventory::query()
                                                     ->orderBy('name')
                                                     ->pluck('name', 'id')
                                                     ->toArray()
                                             )
                                             ->searchable()
                                             ->preload()
-                                            ->required(),
-                                        TextInput::make('received_quantity')
-                                            ->label('Received Quantity')
                                             ->required(),
                                         TextInput::make('quantity')
                                             ->label('Quantity')
@@ -72,7 +70,7 @@ class InvoiceResource extends Resource
                                     ])
                                     ->collapsible()
                                     ->createItemButtonLabel('Add Another Food Item')
-                                    ->columns(3),
+                                    ->columns(2),
                             ])
                     ])
                     ->columnSpan('full')

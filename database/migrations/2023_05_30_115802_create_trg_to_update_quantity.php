@@ -17,30 +17,30 @@ return new class extends Migration
             AFTER UPDATE ON invoice_items 
             FOR EACH ROW 
             BEGIN 
-                IF OLD.food_id = NEW.food_id AND OLD.quantity <> NEW.quantity THEN
-                    UPDATE foods 
+                IF OLD.inventory_id = NEW.inventory_id AND OLD.quantity <> NEW.quantity THEN
+                    UPDATE inventories 
                     SET quantity = quantity - OLD.quantity 
-                    WHERE id = NEW.food_id;
+                    WHERE id = NEW.inventory_id;
                     
-                    UPDATE foods 
+                    UPDATE inventories 
                     SET quantity = quantity + NEW.quantity 
-                    WHERE id = NEW.food_id;
-                ELSEIF OLD.food_id <> NEW.food_id AND OLD.quantity = NEW.quantity THEN
-                    UPDATE foods 
+                    WHERE id = NEW.inventory_id;
+                ELSEIF OLD.inventory_id <> NEW.inventory_id AND OLD.quantity = NEW.quantity THEN
+                    UPDATE inventories 
                     SET quantity = quantity - NEW.quantity 
-                    WHERE id = OLD.food_id;
+                    WHERE id = OLD.inventory_id;
                     
-                    UPDATE foods 
+                    UPDATE inventories 
                     SET quantity = quantity + NEW.quantity 
-                    WHERE id = NEW.food_id;
-                ELSEIF OLD.food_id <> NEW.food_id AND OLD.quantity <> NEW.quantity THEN
-                    UPDATE foods 
+                    WHERE id = NEW.inventory_id;
+                ELSEIF OLD.inventory_id <> NEW.inventory_id AND OLD.quantity <> NEW.quantity THEN
+                    UPDATE inventories 
                     SET quantity = quantity - OLD.quantity 
-                    WHERE id = OLD.food_id;
+                    WHERE id = OLD.inventory_id;
                     
-                    UPDATE foods 
+                    UPDATE inventories 
                     SET quantity = quantity + NEW.quantity 
-                    WHERE id = NEW.food_id;
+                    WHERE id = NEW.inventory_id;
                 END IF;
             END;
         ');

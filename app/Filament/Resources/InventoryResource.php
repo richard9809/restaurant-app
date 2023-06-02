@@ -5,7 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\InventoryResource\Pages;
 use App\Filament\Resources\InventoryResource\RelationManagers;
 use App\Models\Inventory;
+use App\Models\Unit;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -23,8 +25,14 @@ class InventoryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('unit_id')
-                    ->required(),
+                Select::make('unit_id')
+                ->label('Unit')
+                ->options(
+                    Unit::query()
+                        ->orderBy('name')
+                        ->pluck('name', 'id')
+                        ->toArray()
+                )->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -39,9 +47,9 @@ class InventoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('unit_id'),
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('quantity'),
+                Tables\Columns\TextColumn::make('unit.name'),
                 Tables\Columns\TextColumn::make('reorder_level'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(),

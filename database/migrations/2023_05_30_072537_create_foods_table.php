@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedInteger('price');
             $table->unsignedInteger('quantity')->default(0);
             $table->foreignId('unit_id')->constrained('units')->cascadeOnDelete();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

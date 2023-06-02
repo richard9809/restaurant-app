@@ -13,13 +13,13 @@ return new class extends Migration
     public function up(): void
     {
         DB::unprepared('
-            CREATE OR REPLACE TRIGGER trg_to_add_quantity 
-            AFTER INSERT ON invoice_items 
+            CREATE OR REPLACE TRIGGER trg_to_delete_food_quantity_after_receipt_items
+            AFTER DELETE ON receipt_items 
             FOR EACH ROW 
             BEGIN 
-                UPDATE inventories 
-                SET quantity = quantity + NEW.quantity 
-                WHERE id = NEW.inventory_id; 
+                UPDATE foods 
+                SET quantity = quantity - OLD.food_quantity 
+                WHERE id = OLD.food_id; 
             END;
         ');
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('trg_to_add_quantity');
+        Schema::dropIfExists('trg_to_delete_food_quantity_after_receipt_items');
     }
 };
