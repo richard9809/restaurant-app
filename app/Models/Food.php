@@ -29,4 +29,9 @@ class Food extends Model
         return $this->belongsTo(Unit::class);
     }
 
+    public function receipt_items()
+    {
+        return $this->hasMany(ReceiptItem::class);
+    }
+
 }

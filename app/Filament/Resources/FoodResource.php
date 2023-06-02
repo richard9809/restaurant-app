@@ -63,7 +63,7 @@ class FoodResource extends Resource
                         ->image()
                         ->directory('foods')
                         ->imageCropAspectRatio('1:1')
-                        ->avatar(),
+                        ->maxSize(5120),
                     ])
                     ->columns(2),
             ]);
