@@ -81,10 +81,13 @@ class InvoiceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('invoice_number'),
+                Tables\Columns\TextColumn::make('invoice_number')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->sortable()
                     ->dateTime(),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->sortable()
                     ->dateTime(),
             ])
             ->filters([
