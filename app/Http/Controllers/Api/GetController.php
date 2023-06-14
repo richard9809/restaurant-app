@@ -25,9 +25,25 @@ class GetController extends Controller
         return new CategoryCollection($categories);
     }
 
+    // public function getFoods(Request $request)
+    // {
+    //     $foods = Food::orderBy('name')->get(['id', 'name', 'price', 'quantity', 'unit_id', 'food_category_id', 'image']);
+    //     return new FoodCollection($foods);
+    // }
+
     public function getFoods(Request $request)
     {
-        $foods = Food::orderBy('name')->get(['id', 'name', 'price', 'quantity', 'unit_id', 'food_category_id', 'image']);
+        $category = $request->query('category');
+
+        if ($category) {
+            $foods = Food::whereHas('foodCategory', function ($query) use ($category) {
+                $query->where('food_category_id', $category);
+            })->orderBy('name')->get(['id', 'name', 'price', 'quantity', 'unit_id', 'food_category_id', 'image']);
+        }
+        else {
+            $foods = Food::orderBy('name')->get(['id', 'name', 'price', 'quantity', 'unit_id', 'food_category_id', 'image']);
+        }
+
         return new FoodCollection($foods);
     }
 

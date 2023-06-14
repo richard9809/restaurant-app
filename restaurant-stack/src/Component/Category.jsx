@@ -2,10 +2,10 @@ import React, { useEffect } from 'react'
 import { useState } from 'react';
 import axiosClient from '../axios-client';
 
-const Category = () => {
-    const [selectedCategory, setSelectedCategory] = useState('All');
-    const [categories, setCategories] = useState([]);
+const Category = ({ onCategoryChange }) => {
+    const [selectedCategory, setSelectedCategory] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
       setLoading(true);
@@ -19,10 +19,10 @@ const Category = () => {
           console.log(err);
         })
     }, []);
-  
-    //${selectedCategory === category.name ? 'bg-blue-500 text-white' : ''}
-    const handleCategoryClick = (categoryName) => {
-      setSelectedCategory(categoryName);
+
+    const handleCategoryClick = (id) => {
+      setSelectedCategory(id);
+      onCategoryChange(id);
     };
   
   return (
@@ -41,10 +41,11 @@ const Category = () => {
         {!loading && (
           <>
             <button
+              key={0}
               className={`${
-                selectedCategory === 'All' ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-blue-600 hover:text-white'
+                selectedCategory === 0 ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-blue-600 hover:text-white'
               } text-gray-700 font-semibold rounded-md py-2 px-10 mr-4`}
-              onClick={() => handleCategoryClick('All')}
+              onClick={() => handleCategoryClick(0)}
             >
               All
             </button>
@@ -52,9 +53,9 @@ const Category = () => {
               <button
                 key={category.id}
                 className={`${
-                  selectedCategory === category.name ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-blue-600 hover:text-white'
+                  selectedCategory === category.id ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-blue-600 hover:text-white'
                 } text-gray-700 font-semibold rounded-md py-2 px-10 mr-4`}
-                onClick={() => handleCategoryClick(category.name)}
+                onClick={() => handleCategoryClick(category.id)}
               >
                 {category.name}
               </button>
