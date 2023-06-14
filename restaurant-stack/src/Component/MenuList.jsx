@@ -2,22 +2,24 @@ import React, { useEffect, useState } from 'react'
 import MenuItem from './MenuItem'
 import axiosClient from '../axios-client';
 
-const MenuList = ({ onItemClick }) => {
-  const [menus, setMenus] = useState([]);
+const MenuList = ({ onItemClick, category }) => {
   const [loading, setLoading] = useState(false);
+  const [menus, setMenus] = useState([]);
 
-    useEffect(() => {
-      setLoading(true);
-      axiosClient.get('/foods')
-        .then((res) => {
-          setLoading(false);
-          setMenus(res.data.data);
-        })
-        .catch((err) => {
-          setLoading(false); 
-          console.log(err);
-        })
-    }, []);
+  useEffect(() => {
+    setLoading(true);
+    const url = category ? `/foods?category=${category}` : '/foods';
+    console.log('URL:', url);
+    axiosClient.get(url)
+      .then((res) => {
+        setMenus(res.data.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      })
+  }, [category]);
 
   return (
     <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4 py-2 px-4">
