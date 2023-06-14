@@ -52,6 +52,7 @@ class InventoryResource extends Resource
                 Tables\Columns\TextColumn::make('unit.name'),
                 Tables\Columns\TextColumn::make('reorder_level'),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->sortable()
                     ->dateTime(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime(),

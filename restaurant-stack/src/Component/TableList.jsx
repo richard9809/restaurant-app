@@ -1,8 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import TableItem from './TableItem';
+import axiosClient from '../axios-client';
 
-const TableList = ({ tables, onTableClick }) => {
-    
+const TableList = ({ onTableClick }) => {
+
+  const [tables, setTables] = useState([]);
+
+  useEffect(() => {
+    axiosClient.get('/tables')
+      .then((res) => {
+        console.log(res.data.data);
+        setTables(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }, []);
+
   return (
     <div>
         <h2 className='pb-2 px-4 border-b border-gray-400 text-4xl'>Table List</h2>
