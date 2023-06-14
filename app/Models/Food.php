@@ -17,6 +17,7 @@ class Food extends Model
         'price',
         'quantity',
         'unit_id',
+        'image',
     ];
 
     public function foodCategory()

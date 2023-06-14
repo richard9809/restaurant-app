@@ -16,10 +16,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [\App\Http\Controllers\Api\AuthController::class, 'login']);
 
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+    Route::get('/tables', [\App\Http\Controllers\Api\GetController::class, 'getTables']);
+    Route::get('/categories', [\App\Http\Controllers\Api\GetController::class, 'categories']);
+    Route::get('/foods', [\App\Http\Controllers\Api\GetController::class, 'getFoods']);
     Route::post('/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);    
 
 });
