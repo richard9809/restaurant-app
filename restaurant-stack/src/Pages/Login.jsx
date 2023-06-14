@@ -1,6 +1,35 @@
-import React from 'react'
+import React, {createRef, useState} from 'react'
+import {Link} from "react-router-dom";
+import { useStateContext } from '../contexts/ContextProvider';
+import axiosClient from '../axios-client';
 
  const Login = () => {
+  const emailRef = createRef()
+  const passwordRef = createRef()
+  const { setUser, setToken } = useStateContext()
+  const [message, setMessage] = useState(null)
+
+  const onSubmit = ev => {
+    ev.preventDefault()
+
+    const payload = {
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+    }
+
+    axiosClient.post('/login', payload)
+      .then(({data}) => {
+        setUser(data.user)
+        setToken(data.token);
+      })
+      .catch((err) => {
+        const response = err.response;
+        if (response && response.status === 422) {
+          setMessage(response.data.message)
+        }
+      })
+  }
+
   return (
     <>
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -16,7 +45,7 @@ import React from 'react'
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" method="POST">
+        <form className="space-y-6" onSubmit={onSubmit} method="POST">
           <div>
             <label
               htmlFor="email"
@@ -31,10 +60,11 @@ import React from 'react'
                 type="email"
                 autoComplete="email"
                 required
+                ref={emailRef}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
-            {/* {error && <p className="text-red-500 text-xs italic">{error}</p>} */}
+            {message && <p className="text-red-500 text-xs italic">{message}</p>} 
           </div>
 
           <div>
@@ -61,7 +91,7 @@ import React from 'react'
                 type="password"
                 autoComplete="current-password"
                 required
-                onChange={(e) => setPassword(e.target.value)}
+                ref={passwordRef}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
