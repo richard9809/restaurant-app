@@ -20,7 +20,8 @@
     "flowbite-react": "^0.4.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.11.2"
+    "react-router-dom": "^6.11.2",
+    "stringify": "^5.2.0"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",

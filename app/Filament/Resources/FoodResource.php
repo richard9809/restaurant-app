@@ -73,6 +73,9 @@ class FoodResource extends Resource
     {
         return $table
             ->columns([
+                ImageColumn::make('image')
+                    ->label('Image')
+                    ->rounded(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('price')
@@ -86,9 +89,6 @@ class FoodResource extends Resource
                 Tables\Columns\TextColumn::make('foodCategory.name')
                     ->label('Food Category')
                     ->searchable(),
-                ImageColumn::make('image')
-                    ->label('Image')
-                    ->rounded(),
             ])
             ->filters([
                 //
