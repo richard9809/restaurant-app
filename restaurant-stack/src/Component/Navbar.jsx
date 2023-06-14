@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Navbar = () => {
+const Navbar = ({user}) => {
   return (
     <nav className="bg-blue-900 text-white p-4 flex justify-between items-center">
       <div className="text-white flex items-center">
@@ -25,7 +25,7 @@ const Navbar = () => {
           alt="User Profile"
           className="rounded-full w-8 h-8 mx-1"
         />
-        <span className="ml-2 text-xl">John Doe</span>
+        <span className="ml-2 text-xl">{user}</span>
       </div>
     </nav>
   )
