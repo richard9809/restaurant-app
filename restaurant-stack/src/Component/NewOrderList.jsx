@@ -1,12 +1,41 @@
 import React, { useEffect, useState } from 'react'
 import NewOrderItem from './NewOrderItem';
 import '../custom.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axiosClient from '../axios-client';
 
 const NewOrderList = ({ id, selectedMenus }) => {
   const [orderNumber, setOrderNumber] = useState('');
   const [orderItems, setOrderItems] = useState([]);
   const [total, setTotal] = useState(0);
+
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const updatedOrders = {
+      table_id: id,
+      order_number: orderNumber,
+      items: orderItems.map((item) => ({
+        food_id: item.menuId,
+        quantity: item.quantity,
+      })),
+
+    };
+
+     axiosClient.post('/orders', updatedOrders)
+      .then((res) => {
+        console.log('Order submitted:', res.data);
+        navigate('/orders');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+      
+
+    console.log('Order submitted:', updatedOrders);
+  };
 
 // Function for updating the quantity of an item in the order list
   const handleQuantityChange = (menuId, quantity) => {
@@ -106,7 +135,7 @@ const NewOrderList = ({ id, selectedMenus }) => {
                 <Link to="/" className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-8 rounded-lg ">
                     Cancel Order
                 </Link >
-                <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-8 rounded-lg">
+                <button onClick={handleSubmit} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-8 rounded-lg">
                     Send Order
                 </button>
             </div>
