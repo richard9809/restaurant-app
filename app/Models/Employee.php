@@ -21,6 +21,7 @@ class Employee extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     protected $hidden = [
@@ -38,5 +39,9 @@ class Employee extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 
 }

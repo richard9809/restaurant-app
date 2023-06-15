@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import NewOrderItem from './NewOrderItem';
 import '../custom.css';
+import { Link } from 'react-router-dom';
 
 const NewOrderList = ({ id, selectedMenus }) => {
   const [orderNumber, setOrderNumber] = useState('');
@@ -75,8 +76,8 @@ const NewOrderList = ({ id, selectedMenus }) => {
     const formattedTotal = total.toLocaleString(); // Format total with commas
 
   return (
-    <div class="container ">
-        <div class="top-container">
+    <div className="container ">
+        <div className="top-container">
             <div className='grid grid-cols-2'>
                 <h2 className='text-3xl font-semibold'>ORDER #</h2>
                 <p className='flex justify-end text-2xl'>{orderNumber}</p>
@@ -87,13 +88,13 @@ const NewOrderList = ({ id, selectedMenus }) => {
             </div>
         </div>
 
-        <div class="new-order">
+        <div className="new-order">
             {orderItems.map((orderItem) => (
                 <NewOrderItem key={orderItem.menuId} item={orderItem} onQuantityChange={handleQuantityChange} />
             ))}
         </div>
 
-        <div class="total-container">
+        <div className="total-container">
             <div className='py-2 px-2 border-b-2 border-dashed'>
                 <div className='grid grid-cols-2'>
                     <h3 className='text-3xl font-bold'>TOTAL</h3>
@@ -102,9 +103,9 @@ const NewOrderList = ({ id, selectedMenus }) => {
             </div>
 
             <div className='flex justify-center gap-8 py-2'>
-                <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-8 rounded-lg ">
+                <Link to="/" className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-8 rounded-lg ">
                     Cancel Order
-                </button>
+                </Link >
                 <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-8 rounded-lg">
                     Send Order
                 </button>

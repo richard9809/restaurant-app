@@ -13,7 +13,7 @@ const NewOrderItem = ({ item, onQuantityChange }) => {
         <div className='col-span-2'>
           <div className='flex gap-4 items-center'>
             <img 
-              src={item.image} 
+              src={import.meta.env.VITE_API_BASE_URL+ '/storage/' + item.image}
               alt="food image" 
               className='order-image rounded-md object-cover'
             />
