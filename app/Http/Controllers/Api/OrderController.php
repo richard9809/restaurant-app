@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
+use App\Models\Food;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 
@@ -40,7 +41,35 @@ class OrderController extends Controller
      */
     public function store(StoreOrderRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $employee = Request::user();
+
+        $order = Order::create([
+            'order_number' => $data['order_number'],
+            'table_id' => $data['table_id'],
+            'employee_id' => $employee->id,
+            'total' => 0,
+        ]);
+
+        $items = $request->input('items');
+        $total = 0;
+
+        foreach ($items as $item) {
+            $total += $item['quantity'] * Food::find($item['food_id'])->price;
+
+            $order->orderItems()->create([
+                'food_id' => $item['food_id'],
+                'quantity' => $item['quantity'],
+                'price' => Food::find($item['food_id'])->price,
+                'sub_total' => $item['quantity'] * Food::find($item['food_id'])->price,
+            ]);
+        }
+        $order->total = $total;
+        $order->save();
+
+        return response()->json(['message' => 'Order created successfully'], 201);
+
     }
 
     /**

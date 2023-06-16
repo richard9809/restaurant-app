@@ -70,7 +70,7 @@ const OrdersTable = () => {
                             {row.employee_name}
                         </Table.Cell>
                         <Table.Cell>
-                            {row.total}
+                            {row.total.toLocaleString()}
                         </Table.Cell>
                         <Table.Cell>
                             {row.created_at}
