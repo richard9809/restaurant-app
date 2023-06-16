@@ -1,18 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import OrdersTable from '../Component/OrdersTable'
-import { useStateContext } from '../contexts/ContextProvider'
-import axiosClient from '../axios-client'
 
 const Orders = () => {
-  const {user, setUser} = useStateContext();
-
-  useEffect(() => {
-    axiosClient.get('/user')
-      .then(({data}) => {
-         setUser(data)
-      })
-  }, [])
-
 
   return (
     <div className='orders-page px-8 py-2 '>
