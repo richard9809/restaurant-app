@@ -22,6 +22,14 @@ class OrderResource extends JsonResource
             'employee_name' => $this->employee->name,
             'total' => $this->total,
             'created_at' => $this->created_at->format('H:i:s'),
+            'order_items' => $this->orderItems->map(function ($item) {
+                return [
+                    'food_name' => $item->food->name,
+                    'quantity' => $item->quantity,
+                    'price' => $item->price,
+                    'sub_total' => $item->sub_total,
+                ];
+            }),
         ];
     }
 }

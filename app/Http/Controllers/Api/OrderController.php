@@ -8,7 +8,6 @@ use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Food;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 
 class OrderController extends Controller
@@ -77,7 +76,9 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        $order->load('orderItems');
+        
+        return new OrderResource($order);
     }
 
     /**
@@ -85,7 +86,28 @@ class OrderController extends Controller
      */
     public function update(UpdateOrderRequest $request, Order $order)
     {
-        //
+        $data = $request->validated();
+
+        $order->orderItems()->delete();
+
+        $items = $request->input('items');
+        $total = 0;
+
+        foreach ($items as $item) {
+            $total += $item['quantity'] * Food::find($item['food_id'])->price;
+
+            $order->orderItems()->create([
+                'food_id' => $item['food_id'],
+                'quantity' => $item['quantity'],
+                'price' => Food::find($item['food_id'])->price,
+                'sub_total' => $item['quantity'] * Food::find($item['food_id'])->price,
+            ]);
+        }
+
+        $order->total = $total;
+        $order->save();
+
+        return response()->json(['message' => 'Order updated successfully'], 200);
     }
 
     /**
