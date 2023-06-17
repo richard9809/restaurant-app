@@ -6,7 +6,7 @@ import axiosClient from '../axios-client';
 
 const OrdersTable = ({ role }) => {
     const [ tableData, setTableData ] = useState([]);
-    const [ viewData, setViewData ] = useState({});                     
+    const [ viewData, setViewData ] = useState(null);                     
     const [ loading, setLoading ] = useState(false);
     const [ showViewModal, setShowViewModal ] = useState(false);
     const [ showDeleteModal, setShowDeleteModal ] = useState(false);
@@ -29,13 +29,13 @@ const OrdersTable = ({ role }) => {
         console.log('Clicked ' + id);
         axiosClient.get(`/orders/${id}`)
             .then((res) => {
-                console.log(res);
-                setViewData(res.data.data);
+                setViewData(res.data);
+                setShowViewModal(true);
             })
             .catch((err) => {
                 console.log(err);
+                setShowViewModal(false);
             })
-        setShowViewModal(true);
     };
 
     const handleDelete = (id) => {
@@ -63,14 +63,6 @@ const OrdersTable = ({ role }) => {
     const handleDeleteCancel = () => {
         setShowDeleteModal(false);
     };
-
-    useEffect(() => {
-        if (showViewModal || showDeleteModal) {
-          document.body.classList.add('modal-open');
-        } else {
-          document.body.classList.remove('modal-open');
-        }
-    }, [showViewModal, showDeleteModal]);
     
     const hideModal = () => {
         setShowViewModal(false);
@@ -197,18 +189,18 @@ const OrdersTable = ({ role }) => {
             </Table>
 
             {showViewModal && (
-                <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full bg-opacity-50 bg-gray-900">
-                  <div className="bg-white rounded-lg shadow max-w-2xl">
+                <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full bg-opacity-50 bg-gray-900 ">
+                  <div className="bg-white rounded-lg shadow max-w-4xl width">
                     {viewData && (
                         <>
-                            <div className="flex items-start justify-between p-4 border-b">
-                                <h3 className="text-xl font-semibold text-gray-900">
-                                    Order #{viewData.order_number}
+                            <div className="flex justify-between p-4 border-b ">
+                                <h3 className="flex justify-between text-2xl font-semibold text-gray-900">
+                                    Order# {viewData.order_number}
                                 </h3>
                                 <button
-                                type="button"
-                                className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-                                onClick={hideModal}
+                                    type="button"
+                                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                                    onClick={hideModal}
                                 >
                                 <svg
                                     aria-hidden="true"
@@ -227,31 +219,55 @@ const OrdersTable = ({ role }) => {
                                 </button>
                             </div>
                             <div className="p-6 space-y-6">
-                                <p className="text-base leading-relaxed text-gray-500">
-                                With less than a month to go before the European Union enacts new consumer privacy laws for its citizens,
-                                companies around the world are updating their terms of service agreements to comply.
-                                </p>
-                                <p className="text-base leading-relaxed text-gray-500">
-                                The European Union’s General Data Protection Regulation (G.D.P.R.) goes into effect on May 25 and is meant
-                                to ensure a common set of data rights in the European Union. It requires organizations to notify users as
-                                soon as possible of high-risk data breaches that could personally affect them.
-                                </p>
+                                <div className='flex justify-between'>
+                                    <h2 className="text-lg font-bold text-gray-500">
+                                        {viewData.employee_name}
+                                    </h2>
+                                    <h2 className="text-lg font-bold text-gray-500">
+                                        {viewData.table_name}
+                                    </h2>
+                                </div>
+                                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                        <thead class="text-xs text-gray-700 uppercase bg-blue-100 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Food name
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Price
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Quantity
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    SubTotal
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {viewData.order_items.map((item) => (
+                                                <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        {item.food_name}
+                                                    </th>
+                                                    <td class="px-6 py-4">
+                                                        Ksh {item.price}
+                                                    </td>
+                                                    <td class="px-6 py-4 text-center">
+                                                        {item.quantity}
+                                                    </td>
+                                                    <td class="px-6 py-4 ">
+                                                       Ksh. {item.sub_total}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
-                                <button
-                                data-modal-hide="defaultModal"
-                                type="button"
-                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
-                                >
-                                I accept
-                                </button>
-                                <button
-                                data-modal-hide="defaultModal"
-                                type="button"
-                                className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900"
-                                >
-                                Decline
-                                </button>
+                            <div className="flex justify-end p-6 space-x-2 border-t border-gray-200 rounded-b">
+                                <p className='text-3xl font-bold text-gray-900'>Ksh {viewData.total}</p>
                             </div>
                         </>
                     )}
