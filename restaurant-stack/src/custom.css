@@ -124,6 +124,10 @@ body, html{
   overflow: hidden;
 }
 
+.width {
+  width: 40rem;
+}
+
 /* .order-menu{
   height: 572px; 
   overflow-y: auto;

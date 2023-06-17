@@ -16,7 +16,7 @@
     "@mui/material": "^5.13.3",
     "axios": "^1.4.0",
     "daisyui": "^3.0.0",
-    "flowbite": "^1.6.5",
+    "flowbite": "^1.6.6",
     "flowbite-react": "^0.4.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
