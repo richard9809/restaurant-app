@@ -9,8 +9,19 @@ const NewOrderList = ({ id, selectedMenus }) => {
   const [orderItems, setOrderItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [ menuItems, setMenuItems] = useState([]);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axiosClient.get('/foods')
+      .then((res) => {
+        setMenuItems(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,13 +37,13 @@ const NewOrderList = ({ id, selectedMenus }) => {
   
       return;
     } else {
-    const updatedOrders = {
-      table_id: id,
-      order_number: orderNumber,
-      items: orderItems.map((item) => ({
-        food_id: item.menuId,
-        quantity: item.quantity,
-      })),
+      const updatedOrders = {
+        table_id: id,
+        order_number: orderNumber,
+        items: orderItems.map((item) => ({
+          food_id: item.menuId,
+          quantity: item.quantity,
+        })),
     };
   
     //For dismissing the notification
@@ -42,8 +53,6 @@ const NewOrderList = ({ id, selectedMenus }) => {
         notification.classList.add('hidden');
       });
     
-
-
     setLoading(true);
     axiosClient.post('/orders', updatedOrders)
       .then((res) => {
@@ -86,34 +95,33 @@ const NewOrderList = ({ id, selectedMenus }) => {
     setOrderNumber(generatedOrderNumber);
   }, []);
 
-    //   Function for updating the order list when a new menu is selected
   useEffect(() => {
     setOrderItems((prevItems) => {
-        const updatedItems = selectedMenus.map((menu) => {
-          const existingItem = prevItems.find((item) => item.menuId === menu.id);
-          if (existingItem) {
-            return { 
-              ...existingItem,
-              quantity: existingItem.quantity, // Keep the existing quantity
-            };
-          } else {
-            return {
-              menuId: menu.id,
-              name: menu.name,
-              quantity: 1, // Set the initial quantity to 1
-              price: menu.price,
-              image: menu.image,
-            };
-          }
-        });
-        return updatedItems;
+      const updatedItems = selectedMenus.map((menuID) => {
+        const existingItem = prevItems.find((item) => item.menuId === menuID);
+        if (existingItem) {
+          return {
+            ...existingItem,
+            quantity: existingItem.quantity,
+          };
+        } else {
+          const menuItem = menuItems.find((item) => item.id === menuID);
+          return {
+            menuId: menuItem.id,
+            name: menuItem.name,
+            quantity: 1, // Set the initial quantity to 1
+            price: menuItem.price,
+            image: menuItem.image,
+          };
+        }
       });
+      return updatedItems;
+    });
 
-    // Cleanup function to remove the items not present in selectedMenus
     return () => {
       setOrderItems((prevItems) => {
         const updatedItems = prevItems.filter((item) =>
-          selectedMenus.some((menu) => menu.id === item.menuId)
+          selectedMenus.some((menuID) => menuID === item.menuId)
         );
         return updatedItems;
       });
@@ -125,7 +133,7 @@ const NewOrderList = ({ id, selectedMenus }) => {
         setTotal(calculatedTotal);
     }, [orderItems]);
 
-    const formattedTotal = total.toLocaleString(); // Format total with commas
+  const formattedTotal = total.toLocaleString(); // Format total with commas
 
   return (
     <div className="container ">

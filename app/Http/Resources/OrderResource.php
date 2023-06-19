@@ -24,6 +24,9 @@ class OrderResource extends JsonResource
             'created_at' => $this->created_at->format('H:i:s'),
             'order_items' => $this->orderItems->map(function ($item) {
                 return [
+                    'id' => $item->id,
+                    'food_id' => $item->food_id,
+                    'image' => $item->food->image,
                     'food_name' => $item->food->name,
                     'quantity' => $item->quantity,
                     'price' => $item->price,
