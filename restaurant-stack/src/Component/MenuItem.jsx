@@ -1,8 +1,12 @@
 import { Card } from 'flowbite-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const MenuItem = ({ menu, onItemClick }) => {
+const MenuItem = ({ menu, onItemClick, selectedMenus }) => {
     const [isSelected, setIsSelected] = useState(false);
+
+    useEffect(() => {
+      setIsSelected(selectedMenus.includes(menu.id));
+    }, [selectedMenus, menu.id]);
 
     const cardStyle = {
       backgroundImage:  `url(${import.meta.env.VITE_API_BASE_URL}/storage/${menu.image})`,

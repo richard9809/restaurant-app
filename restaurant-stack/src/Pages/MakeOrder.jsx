@@ -19,21 +19,20 @@ const MakeOrder = () => {
 
   const handleItemClick = (menu) => {
     setSelectedMenus((prevMenus) => {
-      const isMenuSelected = prevMenus.some((item) => item.id === menu.id);
+      const isMenuSelected = prevMenus.includes(menu.id);
       if (isMenuSelected) {
-        return prevMenus.filter((item) => item.id !== menu.id);
+        return prevMenus.filter((id) => id !== menu.id);
       } else {
-        return [...prevMenus, menu];
+        return [...prevMenus, menu.id];
       }
     });
   };
-
 
   return (
     <div className='makeOrder-page'>
       <div className='makeOrder-section-1 col-span-2 flex flex-col border-r'>
         <div className='makeOrder-container'>
-          <MenuList onItemClick={handleItemClick} category={selectedCategory} />
+          <MenuList onItemClick={handleItemClick} category={selectedCategory} selectedMenus={selectedMenus} />
         </div>
         <div className='border-t py-2'>
           <Category onCategoryChange={handleCategoryClick} />

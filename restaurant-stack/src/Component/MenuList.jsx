@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import MenuItem from './MenuItem'
 import axiosClient from '../axios-client';
 
-const MenuList = ({ onItemClick, category }) => {
+const MenuList = ({ onItemClick, category, selectedMenus }) => {
   const [loading, setLoading] = useState(false);
   const [menus, setMenus] = useState([]);
 
@@ -33,7 +33,7 @@ const MenuList = ({ onItemClick, category }) => {
       </div>
       }
       {!loading && menus.map((menu) => (
-        <MenuItem key={menu.id} menu={menu} onItemClick={onItemClick} />
+        <MenuItem key={menu.id} menu={menu} onItemClick={onItemClick} selectedMenus={selectedMenus} />
       ))}
     </div>
   )
