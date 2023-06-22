@@ -132,6 +132,10 @@ body, html{
   letter-spacing: .25rem;
 }
 
+.spacing-2 {
+  letter-spacing: .15rem;
+}
+
 .cash-input {
   display: flex;
   justify-content: space-between;

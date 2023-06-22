@@ -49,7 +49,7 @@ const Payment = ({ id }) => {
             </div>
 
             <div className="flex justify-between py-8">
-                <button className="bg-blue-600 text-white uppercase text-xl font-normal py-4 px-14 rounded-md hover:bg-blue-600 hover:text-white">
+                <button className="bg-blue-600 text-white uppercase text-xl font-normal py-4 px-12 rounded-md hover:bg-blue-600 hover:text-white">
                     <div>
                         <i class="fa fa-money-bill"></i>
                         <p>Cash</p>
@@ -89,7 +89,7 @@ const Payment = ({ id }) => {
                     </p>
                 </div>
                 <div className="py-8">
-                    <button className="bg-green-500 uppercase spacing text-xl font-semibold text-white py-4 px-32 rounded-md hover:bg-green-600">
+                    <button className="bg-green-500 uppercase spacing-2 text-xl font-semibold text-white py-4 px-32 rounded-md hover:bg-green-600">
                         Pay Now
                     </button>
                 </div>
