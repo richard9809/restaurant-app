@@ -8,8 +8,8 @@ const Checkout = () => {
   const { id } = useParams();
 
   return (
-    <div className='checkout-page'>
-      <div className='col-span-3 h-full overflow-hidden'>
+    <div className='checkout-page '>
+      <div className='section col-span-3'>
         <OrderSummary id={id} />
       </div>
       <div className='h-full overflow-hidden px-4 py-4 border-l'>
