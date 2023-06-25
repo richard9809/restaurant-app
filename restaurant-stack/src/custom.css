@@ -124,9 +124,31 @@ body, html{
   overflow: hidden;
 }
 
-.width {
-  width: 40rem;
+.height-50 {
+  height: 38rem;
 }
+
+.spacing {
+  letter-spacing: .25rem;
+}
+
+.spacing-2 {
+  letter-spacing: .15rem;
+}
+
+.cash-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input-underline {
+  border: none;
+  border-bottom: 1px solid black;
+  outline: none;
+  width: 40%;
+}
+
 
 /* .order-menu{
   height: 572px; 
@@ -150,4 +172,9 @@ body, html{
 
 .w-inherit {
   width: inherit;
+}
+
+.section{
+  height: 100%;
+  overflow: hidden;
 }

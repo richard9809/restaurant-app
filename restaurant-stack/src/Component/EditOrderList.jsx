@@ -1,3 +1,12 @@
+
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
+import EditOrderItem from './EditOrderItem';
+import axiosClient from '../axios-client'
+
+const EditOrderList = ({ id, selectedMenus }) => {
+    const navigate = useNavigate();
+
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import EditOrderItem from "./EditOrderItem";
@@ -5,6 +14,7 @@ import axiosClient from "../axios-client";
 import axios from "axios";
 
 const EditOrderList = ({ id, selectedMenus }) => {
+
     const [loading, setLoading] = useState(false);
     const [order, setOrder] = useState({});
     const [total, setTotal] = useState(0);
@@ -14,6 +24,81 @@ const EditOrderList = ({ id, selectedMenus }) => {
     const navigate = useNavigate();
     
     useEffect(() => {
+
+      axiosClient.get('/foods')
+        .then((res) => {
+          setMenuItems(res.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, []);
+
+    useEffect(() => {
+      setLoading(true);
+      axiosClient.get(`/orders/${id}`)
+        .then((res) => {
+          setOrder(res.data);
+    
+          // Set initial values for orderItems from order.orderItems
+          const initialOrderItems = res.data.order_items.map((item) => ({
+            menuId: item.food_id,
+            name: item.food_name,
+            quantity: item.quantity,
+            price: item.price,
+            image: item.image,
+          }));
+          setOrderItems(initialOrderItems);
+          
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    }, [id]);
+  
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      
+      if (orderItems.length === 0) {
+        // Display the notification
+        const notification = document.getElementById('alert-1');
+        notification.classList.remove('hidden');
+
+        setTimeout(() => {
+          notification.classList.add('hidden');
+        }, 4000);
+
+        return;
+      } else {
+        const updatedOrders = {
+          items: orderItems.map((item) => ({
+            food_id: item.menuId,
+            quantity: item.quantity,
+          })),
+        };
+
+          // For dismissing the notification
+          const closeButton = document.querySelector('[data-target="#alert-1"]');
+          closeButton.addEventListener('click', () => {
+            const notification = document.getElementById('alert-1');
+            notification.classList.add('hidden');
+          });
+          
+          setLoading(true);
+          axiosClient.put(`/orders/${id}`, updatedOrders)
+              .then((res) => {
+                setLoading(false);
+                navigate('/orders');
+              })
+              .catch((err) => {
+                console.log(err);
+                setLoading(false);
+              });
+
+      }
+
         axiosClient
             .get("/foods")
             .then((res) => {
@@ -90,6 +175,7 @@ const EditOrderList = ({ id, selectedMenus }) => {
                     setLoading(false);
                 });
         }
+
     };
 
     // Function for updating the quantity of an item in the order list
