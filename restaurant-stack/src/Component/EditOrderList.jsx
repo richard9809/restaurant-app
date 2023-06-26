@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+<<<<<<<<< Temporary merge branch 1
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import EditOrderItem from './EditOrderItem';
@@ -6,7 +6,7 @@ import axiosClient from '../axios-client'
 
 const EditOrderList = ({ id, selectedMenus }) => {
     const navigate = useNavigate();
-=======
+=========
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import EditOrderItem from "./EditOrderItem";
@@ -14,7 +14,7 @@ import axiosClient from "../axios-client";
 import axios from "axios";
 
 const EditOrderList = ({ id, selectedMenus }) => {
->>>>>>> master
+>>>>>>>>> Temporary merge branch 2
     const [loading, setLoading] = useState(false);
     const [order, setOrder] = useState({});
     const [total, setTotal] = useState(0);
@@ -24,7 +24,7 @@ const EditOrderList = ({ id, selectedMenus }) => {
     const navigate = useNavigate();
     
     useEffect(() => {
-<<<<<<< HEAD
+<<<<<<<<< Temporary merge branch 1
       axiosClient.get('/foods')
         .then((res) => {
           setMenuItems(res.data.data);
@@ -98,7 +98,7 @@ const EditOrderList = ({ id, selectedMenus }) => {
               });
 
       }
-=======
+=========
         axiosClient
             .get("/foods")
             .then((res) => {
@@ -175,7 +175,7 @@ const EditOrderList = ({ id, selectedMenus }) => {
                     setLoading(false);
                 });
         }
->>>>>>> master
+>>>>>>>>> Temporary merge branch 2
     };
 
     // Function for updating the quantity of an item in the order list
