@@ -10,7 +10,6 @@ import Login from './Pages/Login';
 import DefaultLayout from './layouts/DefaultLayout';
 import GuestLayout from './layouts/GuestLayout';
 
-
 const router = createBrowserRouter([
   {
     path: '/',
