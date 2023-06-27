@@ -22,10 +22,10 @@ class OrderController extends Controller
 
         if ($employee->role == 'cashier') {
             // Cashiers can view all orders
-            $orders = Order::orderBy('id', 'desc')->paginate(10);
+            $orders = Order::whereDate('created_at', today())->orderBy('id', 'desc')->paginate(10);
         } elseif ($employee->role == 'waiter') {
             // Waiters can view their own orders
-            $orders = $employee->orders()->orderBy('id', 'desc')->paginate(10);
+            $orders = $employee->orders()->whereDate('created_at', today())->orderBy('id', 'desc')->paginate(10);
         } else {
             // Handle other user roles or unauthorized access
             // For example, you can throw an exception or return an empty response

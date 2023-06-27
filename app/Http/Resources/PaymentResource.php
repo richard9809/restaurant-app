@@ -19,7 +19,9 @@ class PaymentResource extends JsonResource
         'id' => $this->id,
         'order_number' => $this->order->order_number,
         'payment_type' => $this->payment_type,
-        'amount' => $this->amount
+        'amount' => $this->amount,
+        'change' => $this->change,
+        'created_at' => $this->created_at->format('H:i:s'),
        ];
     }
 }
