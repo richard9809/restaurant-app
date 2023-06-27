@@ -4,7 +4,7 @@ import { Table, Button } from "flowbite-react";
 import { Link } from "react-router-dom";
 import axiosClient from "../axios-client";
 import ReactToPrint from "react-to-print";
-import { format } from 'date-fns'
+import { format } from "date-fns";
 
 const OrdersTable = ({ role }) => {
     const [tableData, setTableData] = useState([]);
@@ -94,8 +94,8 @@ const OrdersTable = ({ role }) => {
         setShowPrintModal(false);
     };
 
-    const today =format(new Date(),'dd.MM.yyyy');
-    
+    const today = format(new Date(), "dd.MM.yyyy");
+
     return (
         <div>
             <Table striped>
@@ -111,15 +111,19 @@ const OrdersTable = ({ role }) => {
                     </Table.HeadCell>
                 </Table.Head>
                 <Table.Body className="divide-y fs">
-                    {loading && (
+                    {loading ? (
                         <Table.Row>
                             <Table.Cell colSpan={6} className="text-center">
                                 Loading...
                             </Table.Cell>
                         </Table.Row>
-                    )}
-
-                    {!loading &&
+                    ) : tableData.length === 0 ? (
+                        <Table.Row>
+                            <Table.Cell colSpan={6} className="text-center">
+                                No orders for today
+                            </Table.Cell>
+                        </Table.Row>
+                    ) : (
                         tableData.map((row) => (
                             <Table.Row
                                 key={row.id}
@@ -198,7 +202,8 @@ const OrdersTable = ({ role }) => {
                                     )}
                                 </Table.Cell>
                             </Table.Row>
-                        ))}
+                        ))
+                    )}
                 </Table.Body>
             </Table>
 
@@ -312,7 +317,7 @@ const OrdersTable = ({ role }) => {
             )}
 
             {/* Print Modal */}
-            {showPrintModal && printData &&(
+            {showPrintModal && printData && (
                 <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full bg-opacity-50 bg-gray-900 ">
                     <div className="bg-white rounded-lg shadow max-w-4xl width">
                         <div className="flex justify-between p-4 border-b ">
@@ -352,7 +357,9 @@ const OrdersTable = ({ role }) => {
                                     <p className="text-sm">
                                         Tel: +254 715 234324
                                     </p>
-                                    <p className="text-sm">Pin: {printData.order_number}</p>
+                                    <p className="text-sm">
+                                        Pin: {printData.order_number}
+                                    </p>
                                     <p className="text-sm">TILLNO: 2343432</p>
                                 </div>
                                 <div>
@@ -414,18 +421,18 @@ const OrdersTable = ({ role }) => {
                                             <tbody>
                                                 {printData.order_items.map(
                                                     (item) => (
-                                                <tr>
-                                                    <td className="text-left text-sm">
-                                                        {item.food_name}
-                                                    </td>
-                                                    <td className="text-center text-sm px-2">
-                                                        {item.quantity}
-                                                    </td>
-                                                    {/* <td className='text-left'>100</td> */}
-                                                    <td className="text-right text-sm">
-                                                    {item.sub_total}
-                                                    </td>
-                                                </tr>
+                                                        <tr>
+                                                            <td className="text-left text-sm">
+                                                                {item.food_name}
+                                                            </td>
+                                                            <td className="text-center text-sm px-2">
+                                                                {item.quantity}
+                                                            </td>
+                                                            {/* <td className='text-left'>100</td> */}
+                                                            <td className="text-right text-sm">
+                                                                {item.sub_total}
+                                                            </td>
+                                                        </tr>
                                                     )
                                                 )}
                                             </tbody>
@@ -454,7 +461,7 @@ const OrdersTable = ({ role }) => {
                             </div>
                         </div>
                         <div className="flex justify-center p-3 space-x-2 border-t border-gray-200 rounded-b">
-                            <ReactToPrint 
+                            <ReactToPrint
                                 trigger={() => (
                                     <button
                                         type="button"
