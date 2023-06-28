@@ -14,6 +14,8 @@ const Payment = ({ id }) => {
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("cash");
     const [mpesaModal, setMpesaModal] = useState(false);
     const [mpesas, setMpesas] = useState([]);
+    const [mpesaLoading, setMpesaLoading] = useState(false);
+    const [mpesaTransactions, setMpesaTransactions] = useState([]);
 
     const navigate = useNavigate();
 
@@ -57,15 +59,17 @@ const Payment = ({ id }) => {
             }
         } else if (method === "mpesa") {
             setMpesaModal(true);
+            setMpesaLoading(true);
 
             axiosClient
                 .get("/mpesas")
                 .then((res) => {
                     setMpesas(res.data.data);
-                    console.log(res.data.data);
+                    setMpesaLoading(false);
                 })
                 .catch((err) => {
                     console.log(err);
+                    setMpesaLoading(false);
                 });
 
             if (cashDiv && mpesaDiv) {
@@ -79,6 +83,15 @@ const Payment = ({ id }) => {
         setMpesaModal(false);
     };
 
+    // Function to handle transaction deletion
+    const deleteTransaction = (transactionId) => {
+        setMpesaTransactions((prevTransactions) =>
+            prevTransactions.filter(
+                (transaction) => transaction.id !== transactionId
+            )
+        );
+    };
+
     const handleSubmit = () => {
         const paymentData = {
             order_id: id,
@@ -86,7 +99,9 @@ const Payment = ({ id }) => {
                 {
                     amount: cashReceived,
                     change: change,
-                    mpesa_id: null,
+                    mpesa_id: clickedTransactions.includes(mpesaReceived)
+                        ? null
+                        : mpesaReceived,
                 },
             ],
         };
@@ -174,20 +189,46 @@ const Payment = ({ id }) => {
                 </div>
 
                 <div id="mpesa" className="hidden">
-                    <div className="cash-input bg-blue-100 py-4 px-2 rounded-sm ">
-                        <label className="font-normal text-2xl"> Amount</label>
-                        <input
-                            type="number"
-                            class="input-underline text-center text-xl font-bold bg-blue-100"
-                            onChange={handleMpesaReceivedChange}
-                            value={mpesaReceived}
-                        />
-
-                        {/* For MPESA_ID */}
-                        <input
-                            type="number"
-                            class="input-underline text-center text-xl font-bold bg-blue-100 hidden"
-                        />
+                    <div className="bg-blue-100 py-4 px-2 rounded-sm">
+                        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <tbody>
+                                {mpesaTransactions.length === 0 ? (
+                                    <tr>
+                                        <td
+                                            colSpan={3}
+                                            className="text-center p-3"
+                                        >
+                                            No mpesa transactions
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    mpesaTransactions.map((transaction) => (
+                                        <tr
+                                            key={transaction.id}
+                                            className="bg-white dark:bg-gray-800"
+                                        >
+                                            <td className="px-6 py-4 text-md font-medium text-gray-900 dark:text-gray-400 whitespace-nowrap">
+                                                {transaction.first_name}
+                                            </td>
+                                            <td className="px-6 py-4 text-lg font-semibold  dark:text-gray-400 whitespace-nowrap">
+                                               Ksh {transaction.amount}
+                                            </td>
+                                            <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                                <button
+                                                    onClick={() =>
+                                                        deleteTransaction(
+                                                            transaction.id
+                                                        )
+                                                    }
+                                                >
+                                                    <i className=" text-red-500 fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -324,18 +365,16 @@ const Payment = ({ id }) => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {
-                                                mpesas.length === 0 && (
-                                                    <tr>
-                                                        <td
-                                                            colSpan={5}
-                                                            className="text-center p-3"
-                                                        >
-                                                            No mpesa transactions
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            }
+                                            {mpesas.length === 0 && (
+                                                <tr>
+                                                    <td
+                                                        colSpan={5}
+                                                        className="text-center p-3"
+                                                    >
+                                                        No mpesa transactions
+                                                    </td>
+                                                </tr>
+                                            )}
                                             {mpesas.map((mpesa) => (
                                                 <tr
                                                     key={mpesa.id}
@@ -343,7 +382,7 @@ const Payment = ({ id }) => {
                                                 >
                                                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-400 whitespace-nowrap">
                                                         {mpesa.id}
-                                                    </td>   
+                                                    </td>
                                                     <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
                                                         {mpesa.FirstName}
                                                     </td>
@@ -363,9 +402,42 @@ const Payment = ({ id }) => {
                                                         {mpesa.created_at}
                                                     </td>
                                                     <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                                                        <div>
-                                                        <i className="fa fa-pen text-blue-500"></i>
-                                                        </div>
+                                                        <button
+                                                            className="font-medium text-cyan-600 hover:underline hover:text-green-500 dark:text-cyan-500 cursor-pointer"
+                                                            onClick={() => {
+                                                                const transaction =
+                                                                    {
+                                                                        id: mpesa.id,
+                                                                        first_name:
+                                                                            mpesa.FirstName,
+                                                                        amount: mpesa.TransAmount,
+                                                                    };
+                                                                if (
+                                                                    !mpesaTransactions.some(
+                                                                        (t) =>
+                                                                            t.id ===
+                                                                            transaction.id
+                                                                    )
+                                                                ) {
+                                                                    setMpesaTransactions(
+                                                                        (
+                                                                            prevTransactions
+                                                                        ) => [
+                                                                            ...prevTransactions,
+                                                                            transaction,
+                                                                        ]
+                                                                    );
+                                                                }
+                                                                hideModal();
+                                                            }}
+                                                        >
+                                                            <div className="flex gap-2 justify-items-center">
+                                                                <div>
+                                                                    <i className="fa fa-money-bill"></i>
+                                                                </div>
+                                                                <div>Pay</div>
+                                                            </div>
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             ))}
