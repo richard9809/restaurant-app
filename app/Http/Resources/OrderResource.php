@@ -21,6 +21,7 @@ class OrderResource extends JsonResource
             'table_name' => $this->table->name,
             'employee_name' => $this->employee->name,
             'total' => $this->total,
+            'paid' => $this->paid,
             'created_at' => $this->created_at->format('H:i:s'),
             'order_items' => $this->orderItems->map(function ($item) {
                 return [

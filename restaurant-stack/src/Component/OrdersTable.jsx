@@ -24,6 +24,7 @@ const OrdersTable = ({ role }) => {
             .get("/orders")
             .then((res) => {
                 setTableData(res.data.data);
+                console.log(res.data.data);
                 setLoading(false);
             })
             .catch((err) => {
@@ -105,6 +106,7 @@ const OrdersTable = ({ role }) => {
                     <Table.HeadCell>Waiter</Table.HeadCell>
                     <Table.HeadCell>Total</Table.HeadCell>
                     <Table.HeadCell>Time</Table.HeadCell>
+                    <Table.HeadCell>Status</Table.HeadCell>
                     <Table.HeadCell>
                         <span className="sr-only">Edit</span>
                         <span className="sr-only">Pay</span>
@@ -138,6 +140,14 @@ const OrdersTable = ({ role }) => {
                                     Ksh. {row.total.toLocaleString()}
                                 </Table.Cell>
                                 <Table.Cell>{row.created_at}</Table.Cell>
+                                <Table.Cell>
+                                    {row.paid === 0 ? (
+                                       <span className="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">Pending</span>
+                                    ) : (
+                                        <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-700 dark:text-green-300">Paid</span>
+                                    )
+                                    }
+                                </Table.Cell>
                                 <Table.Cell className="flex gap-4">
                                     <a
                                         className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 cursor-pointer"

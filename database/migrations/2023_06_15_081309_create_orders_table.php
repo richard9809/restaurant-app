@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('table_id')->constrained('tables')->cascadeOnDelete();
             $table->foreignId('employee_id')->constrained('employees')->cascadeOnDelete();
             $table->unsignedBigInteger('total');
+            $table->boolean('paid')->default(0);
             $table->timestamps();
         });
     }
