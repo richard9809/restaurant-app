@@ -142,6 +142,15 @@ body, html{
   align-items: center;
 }
 
+.mpesa-input {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.span-2{
+  grid-column: span 2;
+}
+
 .input-underline {
   border: none;
   border-bottom: 1px solid black;
