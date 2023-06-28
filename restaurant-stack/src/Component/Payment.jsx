@@ -36,15 +36,24 @@ const Payment = ({ id }) => {
     const handleCashReceivedChange = (event) => {
         const cash = parseFloat(event.target.value);
         setCashReceived(cash);
-        const payableAmount = order.total;
-        const calculatedChange = cash - payableAmount;
-        setChange(calculatedChange);
     };
 
-    const handleMpesaReceivedChange = (event) => {
-        const mpesa = parseFloat(event.target.value);
-        setMpesaReceived(mpesa);
-    };
+    // Function to get the total amount of all the mpesa transactions
+    useEffect(() => {
+        const total = mpesaTransactions.reduce(
+            (acc, transaction) => acc + parseFloat(transaction.amount),
+            0
+        );
+        setMpesaReceived(total);
+    }, [mpesaTransactions]);
+
+    useEffect(() => {
+        const payableAmount = order.total;
+        const totalReceived = cashReceived + mpesaReceived;
+        const calculatedChange = totalReceived - payableAmount;
+        setChange(calculatedChange);
+    }, [mpesaReceived, cashReceived]);
+
 
     const handlePaymentMethodClick = (method) => {
         setSelectedPaymentMethod(method);
@@ -93,25 +102,38 @@ const Payment = ({ id }) => {
     };
 
     const handleSubmit = () => {
-        const paymentData = {
+   
+        // Prepare payment data
+        const payments = [];
+
+        // Add cash payments
+        if (cashReceived > 0){
+            payments.push({
+                amount: cashReceived,
+                change: change,
+                mpesa_id: null
+            });
+        }
+
+        mpesaTransactions.forEach((transaction) => {
+            payments.push({
+                amount: transaction.amount,
+                change: change,
+                mpesa_id: transaction.id
+            });
+        });
+
+        const payload = {
             order_id: id,
-            payments: [
-                {
-                    amount: cashReceived,
-                    change: change,
-                    mpesa_id: clickedTransactions.includes(mpesaReceived)
-                        ? null
-                        : mpesaReceived,
-                },
-            ],
+            payments: payments,
         };
 
         setPayLoading(true);
 
-        console.log(paymentData);
+        console.log(payload);
 
         axiosClient
-            .post("/payments", paymentData)
+            .post("/payments", payload)
             .then((res) => {
                 console.log(res);
                 setPayLoading(false);
@@ -211,7 +233,7 @@ const Payment = ({ id }) => {
                                                 {transaction.first_name}
                                             </td>
                                             <td className="px-6 py-4 text-lg font-semibold  dark:text-gray-400 whitespace-nowrap">
-                                               Ksh {transaction.amount}
+                                                Ksh {transaction.amount}
                                             </td>
                                             <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
                                                 <button
