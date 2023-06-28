@@ -237,7 +237,7 @@ const Payment = ({ id }) => {
             {/* Modal */}
             {mpesaModal && mpesas && (
                 <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full bg-opacity-50 bg-gray-900 ">
-                    <div className="bg-white rounded-lg shadow max-w-4xl width">
+                    <div className="bg-white rounded-lg shadow max-w-5xl width">
                         <>
                             <div className="flex justify-between p-4 border-b ">
                                 <h3 className="flex justify-between text-2xl font-semibold text-gray-900">
@@ -315,48 +315,60 @@ const Payment = ({ id }) => {
                                                 >
                                                     Time
                                                 </th>
+                                                <th
+                                                    scope="col"
+                                                    class="px-6 py-3"
+                                                >
+                                                    Action
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {mpesas.length === 0 ? (
-                                                <Table.Row>
-                                                    <Table.Cell
-                                                        colSpan={5}
-                                                        className="text-center"
-                                                    >
-                                                        No mpesa transactions
-                                                    </Table.Cell>
-                                                </Table.Row>
-                                            ) : (
-                                                mpesas.map((mpesa) => (
-                                                    <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                                                        <th
-                                                            scope="row"
-                                                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                            {
+                                                mpesas.length === 0 && (
+                                                    <tr>
+                                                        <td
+                                                            colSpan={5}
+                                                            className="text-center p-3"
                                                         >
-                                                            {mpesa.id}
-                                                        </th>
-                                                        <td class="px-6 py-4">
-                                                            {mpesa.FirstName}
-                                                        </td>
-                                                        <td class="px-6 py-4 text-center">
-                                                            {mpesa.MiddleName}
-                                                        </td>
-                                                        <td class="px-6 py-4 ">
-                                                            {mpesa.TransID}
-                                                        </td>
-                                                        <td class="px-6 py-4 ">
-                                                            {mpesa.MSISDN}
-                                                        </td>
-                                                        <td class="px-6 py-4 ">
-                                                            {mpesa.TransAmount}
-                                                        </td>
-                                                        <td class="px-6 py-4 ">
-                                                            {mpesa.created_at}
+                                                            No mpesa transactions
                                                         </td>
                                                     </tr>
-                                                ))
-                                            )}
+                                                )
+                                            }
+                                            {mpesas.map((mpesa) => (
+                                                <tr
+                                                    key={mpesa.id}
+                                                    class="bg-white dark:bg-gray-800"
+                                                >
+                                                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-400 whitespace-nowrap">
+                                                        {mpesa.id}
+                                                    </td>   
+                                                    <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                                        {mpesa.FirstName}
+                                                    </td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                                        {mpesa.MiddleName}
+                                                    </td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                                        {mpesa.TransID}
+                                                    </td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                                        {mpesa.MSISDN}
+                                                    </td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                                        {mpesa.TransAmount}
+                                                    </td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                                        {mpesa.created_at}
+                                                    </td>
+                                                    <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                                        <div>
+                                                        <i className="fa fa-pen text-blue-500"></i>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
                                         </tbody>
                                     </table>
                                 </div>
