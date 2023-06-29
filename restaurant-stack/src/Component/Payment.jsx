@@ -4,6 +4,9 @@ import { Table } from "flowbite-react";
 import axiosClient from "../axios-client";
 import { useNavigate } from "react-router-dom";
 
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const Payment = ({ id }) => {
     const [loading, setLoading] = useState(false);
     const [order, setOrder] = useState({});
@@ -103,6 +106,13 @@ const Payment = ({ id }) => {
 
     const handleSubmit = () => {
    
+         // Check if either cashReceived or mpesaTransactions is empty
+        if (cashReceived === 0 && mpesaTransactions.length === 0) {
+            toast.error("No payments included", {
+                autoClose: 3000
+              });
+            return;
+        } 
         // Prepare payment data
         const payments = [];
 
@@ -147,6 +157,7 @@ const Payment = ({ id }) => {
 
     return (
         <div className="flex flex-col overflow-hidden h-full">
+            <ToastContainer />
             <div className="flex flex-col gap-2 py-2 border-b border-dashed">
                 <h1 className="uppercase font-semibold text-2xl">
                     Payable Amount
