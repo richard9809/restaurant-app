@@ -15,7 +15,7 @@ const TableItem = ({ table, onClick }) => {
       to={`/orders/table/${table.id}`}
       className="inline-block bg-gray-200 hover:bg-blue-700 hover:text-white text-gray-800 text-center font-bold py-4 px-2 rounded-lg"
     >
-      {table.name}
+      Table {table.name}
     </Link>
   )
 }

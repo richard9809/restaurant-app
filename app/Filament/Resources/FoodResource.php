@@ -15,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -91,7 +92,8 @@ class FoodResource extends Resource
                     ->searchable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('foodCategory')
+                    ->relationship('foodCategory', 'name'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
