@@ -4,19 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\Pages\CreateUser;
-use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
-use Filament\Forms;
 use Filament\Forms\Components\Card;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Pages\Page;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
@@ -47,10 +42,6 @@ class UserResource extends Resource
                         ->dehydrated(fn ($state) => filled($state))
                         ->required(fn (Page $livewire) => $livewire instanceof CreateUser)
                         ->maxLength(255),
-                    Select::make('roles')
-                        ->multiple()
-                        ->relationship('roles', 'name')
-                        ->preload(),
                 ])
             ]);
     }

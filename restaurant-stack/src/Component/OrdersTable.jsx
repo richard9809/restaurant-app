@@ -134,7 +134,7 @@ const OrdersTable = ({ role }) => {
                                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                     {row.order_number}
                                 </Table.Cell>
-                                <Table.Cell>{row.table_name}</Table.Cell>
+                                <Table.Cell>Table {row.table_name}</Table.Cell>
                                 <Table.Cell>{row.employee_name}</Table.Cell>
                                 <Table.Cell>
                                     Ksh. {row.total.toLocaleString()}
@@ -255,7 +255,7 @@ const OrdersTable = ({ role }) => {
                                             {viewData.employee_name}
                                         </h2>
                                         <h2 className="text-lg font-bold text-gray-500">
-                                            {viewData.table_name}
+                                            Table {viewData.table_name}
                                         </h2>
                                     </div>
                                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">

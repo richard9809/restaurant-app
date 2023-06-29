@@ -2,26 +2,26 @@
 
 namespace App\Policies;
 
-use App\Models\Table;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class TablePolicy
+class OrderPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user)
     {
-        return $user->hasRole(['System Admin', 'Admin']);
+        return $user;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Table $table)
+    public function view(User $user, Order $order)
     {
-        return $user->hasRole(['System Admin', 'Admin']);
+        return $user;
     }
 
     /**
@@ -29,29 +29,29 @@ class TablePolicy
      */
     public function create(User $user)
     {
-        return $user->hasRole(['System Admin', 'Admin']);
+        //
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Table $table)
+    public function update(User $user, Order $order)
     {
-        return $user->hasRole(['System Admin', 'Admin']);
+        //
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Table $table)
+    public function delete(User $user, Order $order)
     {
-        return $user->hasRole(['System Admin', 'Admin']);
+        return $user;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Table $table)
+    public function restore(User $user, Order $order)
     {
         //
     }
@@ -59,7 +59,7 @@ class TablePolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Table $table)
+    public function forceDelete(User $user, Order $order)
     {
         //
     }
