@@ -195,6 +195,7 @@ const OrdersTable = ({ role }) => {
                                                     <div>Checkout</div>
                                                 </div>
                                             </Link>
+                                            {row.paid === 0 ? (
                                             <a
                                                 className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 cursor-pointer"
                                                 onClick={() =>
@@ -208,6 +209,20 @@ const OrdersTable = ({ role }) => {
                                                     <div>Delete</div>
                                                 </div>
                                             </a>
+                                            ) :
+                                            (
+                                                <a
+                                                className="font-medium text-grey-600 hover:underline dark:text-grey-500 cursor-pointer"
+                                            >
+                                                <div className="flex gap-2 justify-items-center underline">
+                                                    <div>
+                                                        <i className="fa fa-trash"></i>
+                                                    </div>
+                                                    <div>Delete</div>
+                                                </div>
+                                            </a>
+                                            )
+                                            }
                                         </>
                                     )}
                                 </Table.Cell>

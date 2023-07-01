@@ -44,6 +44,30 @@ class OrderController extends Controller
 
         $employee = Request::user();
 
+        $items = $request->input('items');
+        $total = 0;
+        $insufficientItems = [];
+
+        foreach ($items as $item) {
+            $food = Food::find($item['food_id']);
+
+            if (!$food) {
+                return response()->json(['message' => 'Invalid food item'], 422);
+            }
+
+            if ($item['quantity'] > $food->quantity) {
+                $insufficientItems[] = $food->name;
+            }
+
+            $total += $item['quantity'] * Food::find($item['food_id'])->price;
+
+        }
+
+        if (!empty($insufficientItems)) {
+            $message = 'Not enough quantity for food item(s): ' . implode(', ', $insufficientItems);
+            return response()->json(['message' => $message], 422);
+        }
+
         $order = Order::create([
             'order_number' => $data['order_number'],
             'table_id' => $data['table_id'],
@@ -51,19 +75,16 @@ class OrderController extends Controller
             'total' => 0,
         ]);
 
-        $items = $request->input('items');
-        $total = 0;
-
         foreach ($items as $item) {
-            $total += $item['quantity'] * Food::find($item['food_id'])->price;
-
             $order->orderItems()->create([
                 'food_id' => $item['food_id'],
                 'quantity' => $item['quantity'],
                 'price' => Food::find($item['food_id'])->price,
                 'sub_total' => $item['quantity'] * Food::find($item['food_id'])->price,
             ]);
-        }
+
+        };
+
         $order->total = $total;
         $order->save();
 
@@ -88,10 +109,29 @@ class OrderController extends Controller
     {
         $data = $request->validated();
 
-        $order->orderItems()->delete();
-
+        
         $items = $request->input('items');
         $total = 0;
+        $insufficientItems = [];
+        
+        foreach ($items as $item) {
+            $food = Food::find($item['food_id']);
+            
+            if (!$food) {
+                return response()->json(['message' => 'Invalid food item'], 422);
+            }
+    
+            if ($item['quantity'] > $food->quantity) {
+                $insufficientItems[] = $food->name;
+            }
+        }
+        
+        if (!empty($insufficientItems)) {
+            $message = 'Not enough quantity for food item(s): ' . implode(', ', $insufficientItems);
+            return response()->json(['message' => $message], 422);
+        }
+        
+        $order->orderItems()->delete();
 
         foreach ($items as $item) {
             $total += $item['quantity'] * Food::find($item['food_id'])->price;
