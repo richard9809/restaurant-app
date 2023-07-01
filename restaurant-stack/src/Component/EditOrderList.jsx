@@ -76,11 +76,14 @@ const EditOrderList = ({ id, selectedMenus }) => {
                 .then((res) => {
                     console.log(res);
                     setLoading(false);
+                    toast.success('Order updated successfully!');
                     navigate('/orders');
                 })
                 .catch((err) => {
                     console.log(err);
-                    setLoading(false);
+                    setBtnLoading(false);
+                    toast.error('Order update failed!');
+                    toast.error(err.response.data.message); 
                 });
         }
     };
@@ -175,7 +178,8 @@ const EditOrderList = ({ id, selectedMenus }) => {
     const formattedTotal = total.toLocaleString(); // Format total with commas
 
     return (
-        <div className="container ">
+        <div className="container">
+            <ToastContainer />
             <div className="top-container">
                 <div className="grid grid-cols-2">
                     <h2 className="text-3xl font-semibold">ORDER #</h2>

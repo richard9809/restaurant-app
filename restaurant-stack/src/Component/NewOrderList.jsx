@@ -59,6 +59,7 @@ const NewOrderList = ({ id, selectedMenus }) => {
         setLoading(false);
         // Show error toast if submission fails
         toast.error('Failed to submit order. Please try again.');
+        toast.error(err.response.data.message);
       });
       
 
