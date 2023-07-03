@@ -23,17 +23,18 @@ const MenuItem = ({ menu, onItemClick, selectedMenus }) => {
       setIsSelected(!isSelected);
       onItemClick(menu);
     };
+
+    const quantityStyle = menu.quantity === 0 ? { color: 'red' } : {};
   
     return (
 
       <div className="bg-white rounded-lg shadow-md cursor-pointer" onClick={handleItemClick} style={cardStyle}>
         <div className="w-full h-24 rounded-t-md"></div>
         <div className="bg-gray-100 p-2 rounded-b-lg" style={{ position: "absolute", bottom: 0, width: "100%", height: "5.5rem"}}>
-         <h3 className="text-xl font-semibold mb-2">{menu.name}</h3>
-          <p className="text-gray-600 mb-2">
-             Qty: {menu.quantity} | Ksh {menu.price} 
-          {menu.quantity === 0 && <span className="text-red-500"> Out of Stock!!</span>}
-          </p>
+         <h3 className="text-xl font-semibold mb-2" style={quantityStyle}>{menu.name}</h3>
+         <p className="text-gray-600 mb-2">
+          Qty: <span style={quantityStyle}>{menu.quantity}</span> | Ksh <span>{menu.price}</span>
+        </p>
         </div>
       </div>
 
