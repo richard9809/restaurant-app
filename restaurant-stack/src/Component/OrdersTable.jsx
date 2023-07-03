@@ -6,32 +6,23 @@ import axiosClient from "../axios-client";
 import ReactToPrint from "react-to-print";
 import { format } from "date-fns";
 
-const OrdersTable = ({ role }) => {
-    const [tableData, setTableData] = useState([]);
+const OrdersTable = ({
+    role,
+    tableData,
+    loading,
+    onPreviousPage,
+    onNextPage,
+    currentPage,
+    lastPage,
+}) => {
     const [printData, setPrintData] = useState(null);
     const [viewData, setViewData] = useState(null);
-    const [loading, setLoading] = useState(false);
     const [showPrintModal, setShowPrintModal] = useState(false);
     const [showViewModal, setShowViewModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
 
     const componentRef = useRef();
-
-    useEffect(() => {
-        setLoading(true);
-        axiosClient
-            .get("/orders")
-            .then((res) => {
-                setTableData(res.data.data);
-                console.log(res.data.data);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.log(err);
-                setLoading(false);
-            });
-    }, []);
 
     const handleView = (id) => {
         console.log("Clicked " + id);
@@ -142,11 +133,14 @@ const OrdersTable = ({ role }) => {
                                 <Table.Cell>{row.created_at}</Table.Cell>
                                 <Table.Cell>
                                     {row.paid === 0 ? (
-                                       <span className="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">Pending</span>
+                                        <span className="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                                            Pending
+                                        </span>
                                     ) : (
-                                        <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-700 dark:text-green-300">Paid</span>
-                                    )
-                                    }
+                                        <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-700 dark:text-green-300">
+                                            Paid
+                                        </span>
+                                    )}
                                 </Table.Cell>
                                 <Table.Cell className="flex gap-4">
                                     <a
@@ -196,33 +190,29 @@ const OrdersTable = ({ role }) => {
                                                 </div>
                                             </Link>
                                             {row.paid === 0 ? (
-                                            <a
-                                                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 cursor-pointer"
-                                                onClick={() =>
-                                                    handleDelete(row.id)
-                                                }
-                                            >
-                                                <div className="flex gap-2 justify-items-center underline">
-                                                    <div>
-                                                        <i className="fa fa-trash"></i>
-                                                    </div>
-                                                    <div>Delete</div>
-                                                </div>
-                                            </a>
-                                            ) :
-                                            (
                                                 <a
-                                                className="font-medium text-grey-600 hover:underline dark:text-grey-500 cursor-pointer"
-                                            >
-                                                <div className="flex gap-2 justify-items-center underline">
-                                                    <div>
-                                                        <i className="fa fa-trash"></i>
+                                                    className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 cursor-pointer"
+                                                    onClick={() =>
+                                                        handleDelete(row.id)
+                                                    }
+                                                >
+                                                    <div className="flex gap-2 justify-items-center underline">
+                                                        <div>
+                                                            <i className="fa fa-trash"></i>
+                                                        </div>
+                                                        <div>Delete</div>
                                                     </div>
-                                                    <div>Delete</div>
-                                                </div>
-                                            </a>
-                                            )
-                                            }
+                                                </a>
+                                            ) : (
+                                                <a className="font-medium text-grey-600 hover:underline dark:text-grey-500 cursor-pointer">
+                                                    <div className="flex gap-2 justify-items-center underline">
+                                                        <div>
+                                                            <i className="fa fa-trash"></i>
+                                                        </div>
+                                                        <div>Delete</div>
+                                                    </div>
+                                                </a>
+                                            )}
                                         </>
                                     )}
                                 </Table.Cell>
@@ -231,6 +221,54 @@ const OrdersTable = ({ role }) => {
                     )}
                 </Table.Body>
             </Table>
+
+            {/* Pagination buttons */}
+            <div className="flex justify-end mt-2">
+                {onPreviousPage && currentPage > 1 && (
+                    <button
+                        onClick={onPreviousPage}
+                        disabled={loading}
+                        className="inline-flex items-center px-4 py-2 mr-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                        <svg
+                            aria-hidden="true"
+                            className="w-5 h-5 mr-2"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
+                                clipRule="evenodd"
+                            ></path>
+                        </svg>
+                        Previous
+                    </button>
+                )}
+                {onNextPage && currentPage < lastPage && (
+                    <button
+                        onClick={onNextPage}
+                        disabled={loading}
+                        className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                        Next
+                        <svg
+                            aria-hidden="true"
+                            className="w-5 h-5 ml-2"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                            ></path>
+                        </svg>
+                    </button>
+                )}
+            </div>
 
             {showViewModal && (
                 <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full bg-opacity-50 bg-gray-900 ">

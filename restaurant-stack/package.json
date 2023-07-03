@@ -21,6 +21,7 @@
     "flowbite-react": "^0.4.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-paginate": "^8.2.0",
     "react-router-dom": "^6.11.2",
     "react-to-print": "^2.14.13",
     "react-toastify": "^9.1.3",
