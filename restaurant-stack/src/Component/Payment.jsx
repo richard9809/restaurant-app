@@ -57,7 +57,6 @@ const Payment = ({ id }) => {
         setChange(calculatedChange);
     }, [mpesaReceived, cashReceived]);
 
-
     const handlePaymentMethodClick = (method) => {
         setSelectedPaymentMethod(method);
 
@@ -71,29 +70,54 @@ const Payment = ({ id }) => {
             }
         } else if (method === "mpesa") {
             setMpesaModal(true);
-            setMpesaLoading(true);
-
-            axiosClient
-                .get("/mpesas")
-                .then((res) => {
-                    setMpesas(res.data.data);
-                    setMpesaLoading(false);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    setMpesaLoading(false);
-                });
-
-            if (cashDiv && mpesaDiv) {
-                cashDiv.classList.add("hidden");
-                mpesaDiv.classList.remove("hidden");
-            }
+          
         }
     };
+
+    useEffect(() => {
+        if (mpesaModal) {
+          setMpesaLoading(true);
+          axiosClient
+            .get("/mpesas")
+            .then((res) => {
+              setMpesas(res.data.data);
+              setMpesaLoading(false);
+            })
+            .catch((err) => {
+              console.log(err);
+              setMpesaLoading(false);
+            });
+        }
+      }, [mpesaModal]);
 
     const hideModal = () => {
         setMpesaModal(false);
     };
+
+    // Function to handle transaction refresh
+    const refreshMpesaTransactions = () => {
+        setMpesaLoading(true);
+        axiosClient
+            .get("/mpesas")
+            .then((res) => {
+                setMpesas(res.data.data);
+                setMpesaLoading(false);
+            })
+            .catch((err) => {
+                console.log(err);
+                setMpesaLoading(false);
+            });
+    };
+
+    const handleRefreshClick = () => {
+        refreshMpesaTransactions();
+    };
+
+    useEffect(() => {
+        if (mpesaModal) {
+            refreshMpesaTransactions();
+        }
+    }, [mpesaModal]);
 
     // Function to handle transaction deletion
     const deleteTransaction = (transactionId) => {
@@ -225,7 +249,19 @@ const Payment = ({ id }) => {
                     <div className="bg-blue-100 py-4 px-2 rounded-sm">
                         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <tbody>
-                                {mpesaTransactions.length === 0 ? (
+                                {mpesaLoading ? (
+                                    <tr>
+                                        <td
+                                            colSpan={3}
+                                            className="text-center p-3"
+                                        >
+                                            <div role="status" class="max-w-sm animate-pulse">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ) : 
+                                mpesaTransactions.length === 0 ? (
                                     <tr>
                                         <td
                                             colSpan={3}
@@ -338,11 +374,18 @@ const Payment = ({ id }) => {
                                     <span className="sr-only">Close modal</span>
                                 </button>
                             </div>
-                            <div className="p-6 space-y-6">
+                            <div className="p-2 space-y-2">
                                 <div className="flex justify-between">
-                                    <h2 className="text-lg font-bold text-gray-500"></h2>
-                                    <h2 className="text-lg font-bold text-gray-500"></h2>
+                                    {/* refresh btn */}
+                                <button
+                                type="button"
+                                className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center  mr-2"
+                                onClick={handleRefreshClick}
+                                >
+                                    <p className="text-gray-400">Refresh</p>
+                                </button>
                                 </div>
+                                
                                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                         <thead class="text-xs text-gray-700 uppercase bg-blue-100 dark:bg-gray-700 dark:text-gray-400">
