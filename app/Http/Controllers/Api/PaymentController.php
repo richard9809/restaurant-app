@@ -17,7 +17,7 @@ class PaymentController extends Controller
     {
         $payments = Payment::whereDate('created_at', today())
             ->orderBy('id', 'desc')
-            ->paginate(10);
+            ->get();
 
         return PaymentResource::collection($payments);
     }

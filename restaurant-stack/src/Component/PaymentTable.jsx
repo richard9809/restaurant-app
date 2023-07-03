@@ -1,24 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { Table } from "flowbite-react";
 import { Pagination } from "flowbite-react";
 
-const PaymentTable = ({ payments, loading }) => {
-
-    const [currentPage, setCurrentPage] = useState(1);
-
-    const handlePreviousPage = ()=> {
-        if (currentPage > 1){
-            setCurrentPage((prevPage) => prevPage - 1);
-        }
-    };
-
-    const handleNextPage = () => {
-        if (currentPage < payments.last_page){
-            setCurrentPage((prevPage) => prevPage + 1);
-        }
-    };
-
+const PaymentTable = ({ payments, loading}) => {
     return (
         <div>
             <Table hoverable className="mb-2">
@@ -69,23 +54,6 @@ const PaymentTable = ({ payments, loading }) => {
                 </Table.Body>
             </Table>
 
-            {/* Pagination buttons */}
-            <div className="flex justify-center my-1">
-                <button 
-                className="mr-2 px-4 bg-blue-500 text-white rounded"
-                onClick={handlePreviousPage}
-                disabled={currentPage === 1}
-                >
-                    &laquo; Previous
-                </button>
-                <button
-                    className="ml-2 px-4 py-2 bg-blue-500 text-white rounded"
-                    onClick={handleNextPage}
-                    disabled={currentPage === payments.last_page}
-                >
-                        Next &raquo;
-                    </button>
-            </div>
         </div>
     );
 };

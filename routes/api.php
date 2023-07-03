@@ -23,7 +23,6 @@ Route::post("sts/validation", [MpesaController::class, "mpesaValidation"]);
 Route::post("sts/register/urls", [MpesaController::class, "mpesaRegisterUrls"]);
 Route::post("sts/simulate", [MpesaController::class, "simulateTransaction"]);
 
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
